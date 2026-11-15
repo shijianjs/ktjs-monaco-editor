@@ -22,13 +22,17 @@ type alias, function and constant. Detailed list, per-namespace breakdown and th
 - [x] Chromium test suite for the wrapper (Karma, 10 cases)
 - [x] Demo page with a language switch, and its Playwright suite
 - [x] Documentation site in English and Chinese, linking to the demo and `/api/`
-- [x] GitHub Pages workflow
+- [x] GitHub Pages enabled (source: GitHub Actions); first deployment verified at `/`, `/zh-Hans/`,
+      `/demo/` and `/api/`
+- [x] CI green on `main` (Linux, official npm registry): build, Karma suite, Pages assembly, demo
+      end-to-end suite, and the generated-declaration check
 - [ ] Release `0.57.0-kt.1` to Maven Central (needs a manual run of `release.yml`; the wrapper is
       not published yet)
 
 ### Constraints worth remembering
 
-- Generated files are never edited; re-run `scripts/generate-api.py` instead.
+- Generated files are never edited; re-run `scripts/generate-api.py` instead. CI regenerates them and
+  fails on any diff, so an upstream bump only lands together with its regenerated declarations.
 - The demo and the docs are the consumer's reference: anything a consumer must do (bundler rules,
   worker URL) is documented, not hidden inside the wrapper.
 - A declaration counts as done only when the generator writes it **and** the module compiles; a
