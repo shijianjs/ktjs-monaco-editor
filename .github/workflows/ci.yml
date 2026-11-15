@@ -46,6 +46,16 @@ jobs:
       - name: Build and test
         run: ./gradlew build --stacktrace
 
+      # The declarations are generated from the monaco-editor version `package.json` pins, so a stale
+      # checkout and an upstream bump are indistinguishable until someone regenerates. This is also
+      # what makes a Dependabot bump of `monaco-editor` fail until the generator has been re-run.
+      - name: Verify the generated declarations are current
+        run: |
+          python3 scripts/generate-api.py
+          python3 scripts/generate-api.py --coverage
+          git status --porcelain -- ktjs-monaco-editor/src docs/development/coverage.md
+          test -z "$(git status --porcelain -- ktjs-monaco-editor/src docs/development/coverage.md)"
+
       # Validates the demo bundle, the docs site and the Dokka reference that the Pages workflow
       # deploys.
       - name: Assemble Pages site
