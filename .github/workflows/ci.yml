@@ -36,6 +36,9 @@ jobs:
       - name: Install browser test dependencies
         run: npx --yes playwright install-deps chromium
 
+      - name: Install the Chromium the demo suite drives
+        run: ./gradlew :demo:installPlaywrightBrowsers
+
       - name: Refresh npm lock file
         if: github.actor == 'dependabot[bot]'
         run: ./gradlew kotlinUpgradePackageLock

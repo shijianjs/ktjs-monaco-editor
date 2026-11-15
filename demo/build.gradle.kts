@@ -33,7 +33,7 @@ kotlin {
         jsMain.dependencies {
             implementation("org.jetbrains.kotlin-wrappers:kotlin-browser:2026.11.1")
             // The published modules the demo demonstrates, one line each.
-            implementation(project(":ktjs-wrapper-template-core"))
+            implementation(project(":ktjs-monaco-editor"))
         }
 
         jvmTest.dependencies {
@@ -65,14 +65,24 @@ tasks.named("jsProcessResources") {
 // ---------------------------------------------------------------------------------------------
 val jvmE2eCompilation = kotlin.targets.getByName("jvm").compilations.getByName("test")
 
+// The suite drives Playwright's own Chromium rather than the system one, so the browser has to be
+// present. Kotlin/JS only generates this task for its own Playwright test task, and the wrapper
+// module tests in Chromium through Karma, so the demo registers the install itself. CI runs it once
+// before `:demo:e2eTest`.
+tasks.register<JavaExec>("installPlaywrightBrowsers") {
+    group = "verification"
+    description = "Downloads the Chromium build the end-to-end suite drives."
+    classpath = files(jvmE2eCompilation.output.allOutputs, jvmE2eCompilation.runtimeDependencyFiles)
+    mainClass.set("com.microsoft.playwright.CLI")
+    args("install", "chromium")
+}
+
 tasks.register<Test>("e2eTest") {
     group = "verification"
     description = "Runs the Kotlin/JVM Playwright suite against the bundled demo page."
     useJUnitPlatform()
     dependsOn("jsBrowserDistribution")
-    // The Chromium is installed for the Kotlin/JS browser tests of the wrapper module, and this suite
-    // reuses it. A derived project points this at its own first published module.
-    dependsOn(":ktjs-wrapper-template-core:kotlinInstallPlaywrightBrowsers")
+    // The Chromium comes from `installPlaywrightBrowsers`, which CI runs before this task.
 
     testClassesDirs = jvmE2eCompilation.output.classesDirs
     classpath = files(jvmE2eCompilation.output.allOutputs, jvmE2eCompilation.runtimeDependencyFiles)

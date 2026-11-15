@@ -1,64 +1,106 @@
 package demo
 
-import io.github.shijianjs.ktjs.wrappertemplate.core.createButton
-import web.cssom.ClassName
+import io.github.shijianjs.ktjs.monaco.Environment
+import io.github.shijianjs.ktjs.monaco.Monaco
+import js.objects.unsafeJso
 import web.dom.document
-import web.events.EventHandler
-import web.html.HtmlTagName
 import web.html.HTMLElement
+import web.html.HtmlTagName
 
-private const val PROJECT_NAME = "ktjs-wrapper-template"
+private const val PROJECT_NAME = "ktjs-monaco-editor"
+
+/**
+ * The worker bundle the page ships next to `demo.js`.
+ *
+ * monaco's own loader is a Vite-style dynamic import, which webpack cannot resolve, so the demo emits
+ * the worker as an extra webpack entry (`demo/webpack.config.d/monaco-worker.js`) and tells monaco
+ * where it is. A consumer of the wrapper does the same for their bundler.
+ */
+private const val WORKER_SCRIPT = "editor.worker.js"
 
 /**
  * Entry point of the demo page.
  *
- * Deliberately small: it creates two `<vaadin-button>` elements through the wrapper module and wires
- * them to a counter, which is the shape every wrapped package takes. Nodes are built with
- * `document.createElement` and mutated in place — no HTML strings (see the UI conventions in
- * AGENTS.md).
+ * The layout is a two-column page: the live editor on the left, the wrapper calls and their output on
+ * the right. The language switch re-labels every control in place — the editor is created once, so
+ * switching between English and Chinese keeps the model, the cursor and the decorations.
  */
 fun main() {
-    val root = document.createElement(HtmlTagName.div).apply { className = ClassName("page") }
+    val stringsByLanguage = listOf(English, Chinese)
 
-    // The brand image is copied in from the site's static files by the `brandAssets` task.
-    val logo = document.createElement(HtmlTagName.img).apply {
-        className = ClassName("logo")
-        setAttribute("src", "img/ktjs-wrapper-template-logo.png")
-        setAttribute("alt", "$PROJECT_NAME logo")
+    // Must be set before the first editor exists: monaco reads it when it starts a language service.
+    Monaco.environment = unsafeJso<Environment> {
+        getWorkerUrl = { _, _ -> WORKER_SCRIPT }
+    }
+
+    val output = pre("output", English.emptyOutput)
+    val call = pre("call")
+    val editorHost = div("editor")
+    val playground = Playground(editorHost, output, call)
+
+    val tagline = paragraph("tagline", English.tagline)
+    val footer = paragraph("footer", English.footer)
+    val editorHeading = heading(2, English.editorHeading)
+    val controlsHeading = heading(2, English.controlsHeading)
+    val outputHeading = heading(2, English.outputHeading)
+    val callHeading = heading(2, English.callHeading)
+
+    val controls = div("actions")
+    playground.renderControls(controls, English)
+
+    val switcher = div("switcher")
+    val switchButtons = stringsByLanguage.map { strings ->
+        button("switch", strings.switchLabel).also { switcher.append(it) }
+    }
+
+    fun applyLanguage(index: Int) {
+        val strings = stringsByLanguage[index]
+        document.title = strings.pageTitle
+        tagline.textContent = strings.tagline
+        footer.textContent = strings.footer
+        editorHeading.textContent = strings.editorHeading
+        controlsHeading.textContent = strings.controlsHeading
+        outputHeading.textContent = strings.outputHeading
+        callHeading.textContent = strings.callHeading
+        switchButtons.forEachIndexed { buttonIndex, element ->
+            element.className = web.cssom.ClassName(if (buttonIndex == index) "switch active" else "switch")
+        }
+        playground.apply(strings)
+    }
+
+    switchButtons.forEachIndexed { index, element ->
+        element.onClick { applyLanguage(index) }
     }
 
     val header = document.createElement(HtmlTagName.header).apply {
-        className = ClassName("header")
-        append(logo, createHeading())
+        className = web.cssom.ClassName("header")
     }
+    val brand = div("brand")
+    brand.append(
+        document.createElement(HtmlTagName.img).apply {
+            className = web.cssom.ClassName("logo")
+            setAttribute("src", "img/ktjs-monaco-editor-logo.png")
+            setAttribute("alt", "$PROJECT_NAME logo")
+        },
+        div("brand-text").also {
+            it.append(heading(1, PROJECT_NAME), tagline)
+        },
+    )
+    header.append(brand, switcher)
 
-    val hint = document.createElement(HtmlTagName.p).apply {
-        className = ClassName("hint")
-        textContent = "Both buttons below are <vaadin-button>, created by ktjs-wrapper-template-core " +
-            "from the @vaadin/button package."
-    }
+    val main = div("layout")
+    val left = div("panel editor-panel")
+    left.append(editorHeading, editorHost)
+    val right = div("panel side-panel")
+    right.append(controlsHeading, controls, outputHeading, output, callHeading, call)
 
-    val status = document.createElement(HtmlTagName.p).apply {
-        className = ClassName("status")
-        textContent = "Clicks: 0"
-    }
+    main.append(left, right)
 
-    var clicks = 0
-    val counter = createButton("Click me")
-    counter.onclick = EventHandler {
-        clicks += 1
-        status.textContent = "Clicks: $clicks"
-        counter.textContent = if (clicks == 1) "Clicked once" else "Clicked $clicks times"
-    }
+    val page: HTMLElement = div("page")
+    page.append(header, main, footer)
+    document.body.append(page)
 
-    // The one property the wrapper maps: `disabled` reflects into the element's own state.
-    val toggle = createButton("Disable the other button")
-    toggle.onclick = EventHandler { counter.disabled = !counter.disabled }
-
-    root.append(header, hint, counter, toggle, status)
-    document.body.append(root)
-}
-
-private fun createHeading(): HTMLElement = document.createElement(HtmlTagName.h1).apply {
-    textContent = "$PROJECT_NAME demo"
+    document.title = English.pageTitle
+    // Labels every control once; the language switch re-runs the same function.
+    applyLanguage(0)
 }

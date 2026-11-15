@@ -1,47 +1,49 @@
 ---
-title: ktjs-wrapper-template
-description: 一个立刻能跑的 Kotlin/JS wrapper 项目
+title: ktjs-monaco-editor
+description: monaco-editor 0.57.0 的 Kotlin/JS 封装
 hide_table_of_contents: true
 ---
 
-import logo from '@site/static/img/ktjs-wrapper-template-logo.png';
+import logo from '@site/static/img/ktjs-monaco-editor-logo.png';
 
 {/* `<ktjs-…>` 分区来自 ktjs-docusaurus 的工具箱：Gradle 插件把它的 bundle 放到 `static/ktjs-client/`，
     `ClientModule.kt` 在页面 hydrate 之后加载它。`href` 写成相对路径，两种 locale 前缀下都能用；
     `logo` 用 import 取，这样 URL 会带上本站实际的 `baseUrl`。 */}
 
-<ktjs-hero logo-src={logo} title="ktjs-wrapper-template" tagline="一个可以照抄的 Kotlin/JS wrapper 项目">
+<ktjs-hero logo-src={logo} title="ktjs-monaco-editor" tagline="monaco-editor 0.57.0 的 Kotlin/JS 封装">
 
 <ktjs-action kind="primary" href="intro">开始阅读</ktjs-action>
 
-<ktjs-action kind="secondary" href="https://github.com/shijianjs/ktjs-wrapper-template" icon="simple-icons:github">GitHub</ktjs-action>
+<ktjs-action kind="secondary" href="https://shijianjs.github.io/ktjs-monaco-editor/demo/">在线演示</ktjs-action>
+
+<ktjs-action kind="secondary" href="https://shijianjs.github.io/ktjs-monaco-editor/api/">API 文档</ktjs-action>
 
 </ktjs-hero>
 
-<ktjs-features section-title="为什么从这里开始" tinted>
+<ktjs-features section-title="封装带来了什么" tinted>
 
-<ktjs-feature icon="lucide:play" title="拿来就能跑">克隆下来就是一个能构建、能测试、能部署的项目——第一次 `./gradlew build` 之前没有任何占位符要填。</ktjs-feature>
+<ktjs-feature icon="lucide:type" title="类型而不是 dynamic">monaco `editor.api.d.ts` 里的每条声明都变成 Kotlin `external` 声明：构造对象字面量时选项受检查，成员拼错就构建失败。</ktjs-feature>
 
-<ktjs-feature icon="lucide:package" title="一个包一个模块">一个 wrapper 模块把一个 npm 包映射成一个 Kotlin 包。加第二个包就是复制一个目录，不用重新设计结构。</ktjs-feature>
+<ktjs-feature icon="lucide:code" title="与 TypeScript 同一套 API">`Monaco.editor`、`Monaco.languages` 就是包自己的命名空间对象；`Monaco.Range`、`Monaco.Uri`、`Monaco.KeyMod` 是导出的值类，并配了用于构造的工厂。</ktjs-feature>
 
-<ktjs-feature icon="lucide:shield-check" title="类型而不是 dynamic">上游 `.d.ts` 写成 `external` 声明，编译期就能查；公开面用 `kotlin-browser` 的 `web.*` 类型，能和其他 wrapper 组合。</ktjs-feature>
+<ktjs-feature icon="lucide:refresh-cw" title="由上游生成">`scripts/generate-api.py` 读声明文件并写出封装，所以升级 npm 版本等于重新生成而不是重写——300 个 interface、17 个 class、48 个 enum。</ktjs-feature>
 
-<ktjs-feature icon="lucide:flask-conical" title="在浏览器里测">模块的测试跑在 Chromium 里、打的是真实自定义元素，demo 还有自己的 Playwright 套件，两者都接进了 CI。</ktjs-feature>
+<ktjs-feature icon="lucide:flask-conical" title="在真实浏览器里测">模块的用例通过 Karma 在 Chromium 里跑真实包；demo 的 Playwright 套件检查生产 bundle，包括 CSS 与 worker。</ktjs-feature>
 
 <ktjs-feature icon="lucide:book-open" title="文档也是 Kotlin">本站就是由 ktjs-docusaurus 构建的 Kotlin/JS 模块：类型化的配置与侧边栏、Markdown 页面、中英双语。</ktjs-feature>
 
-<ktjs-feature icon="lucide:rocket" title="Pages 与发布已接好">`pagesSite` 组装文档、demo 与 API 文档；`release.yml` 负责签名并经由 Maven Central hub 发布模块。</ktjs-feature>
+<ktjs-feature icon="lucide:rocket" title="Pages 已接好">`pagesSite` 组装本站、`/demo/` 下的演示和 `/api/` 下的 Dokka 文档，Pages 工作流一次部署三份产物。</ktjs-feature>
 
 </ktjs-features>
 
 <ktjs-next-steps section-title="接下来">
 
-<ktjs-step href="intro" title="简介">仓库里有什么，为什么不用任何初始化就能用。</ktjs-step>
+<ktjs-step href="intro" title="简介">封装覆盖了什么，一条声明长什么样。</ktjs-step>
 
-<ktjs-step href="guide/getting-started" title="快速开始">环境要求、构建任务与两个开发服务器。</ktjs-step>
+<ktjs-step href="guide/getting-started" title="快速开始">依赖、第一个编辑器、monaco 需要的打包规则。</ktjs-step>
 
-<ktjs-step href="guide/deriving-a-project" title="派生新项目">把它改成你自己的 wrapper 的改名清单。</ktjs-step>
+<ktjs-step href="guide/api-overview" title="API 概览">值类、字面量联合、可选成员——怎么读这些声明。</ktjs-step>
 
-<ktjs-step href="https://shijianjs.github.io/ktjs-wrapper-template/api/" title="API 文档">发布模块的 Dokka 产物。</ktjs-step>
+<ktjs-step href="https://shijianjs.github.io/ktjs-monaco-editor/demo/" title="在线演示">一个编辑器、九个封装调用，以及每次调用对应的 Kotlin 源码。</ktjs-step>
 
 </ktjs-next-steps>

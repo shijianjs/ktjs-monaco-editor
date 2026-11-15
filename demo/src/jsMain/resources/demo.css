@@ -3,13 +3,19 @@
     --page-fg: #1f2933;
     --page-bg: #ffffff;
     --page-muted: #52606d;
+    --page-border: #d9e2ec;
+    --page-accent: #0b6bcb;
+    --page-panel: #f7f9fc;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --page-fg: #e4e7eb;
-        --page-bg: #111827;
+        --page-bg: #0f1621;
         --page-muted: #9aa5b1;
+        --page-border: #24303f;
+        --page-accent: #7cb3ff;
+        --page-panel: #16202d;
     }
 }
 
@@ -28,28 +34,144 @@ body {
 }
 
 .page {
-    max-width: 72rem;
+    max-width: 84rem;
     margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
+    padding: 1.5rem 1.25rem 3rem;
 }
 
 .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
 }
 
 .logo {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
 }
 
-.hint,
-.status {
+.brand-text h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.tagline,
+.footer {
+    color: var(--page-muted);
+    margin: 0;
+}
+
+.footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+.switcher {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.switch {
+    border: 1px solid var(--page-border);
+    background: transparent;
+    color: inherit;
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.switch.active {
+    border-color: var(--page-accent);
+    color: var(--page-accent);
+    font-weight: 600;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 62rem) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.panel {
+    border: 1px solid var(--page-border);
+    border-radius: 0.75rem;
+    background: var(--page-panel);
+    padding: 1rem;
+    min-width: 0;
+}
+
+.panel h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.05rem;
+}
+
+.editor {
+    /* Monaco measures its container, so it needs a real height. */
+    height: 26rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.action {
+    border: 1px solid var(--page-border);
+    background: transparent;
+    color: inherit;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.action:hover {
+    border-color: var(--page-accent);
+}
+
+.output,
+.call {
+    margin: 0 0 1rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--page-bg);
+    border: 1px solid var(--page-border);
+    font-family: ui-monospace, "Cascadia Code", "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 16rem;
+    overflow: auto;
+}
+
+.call {
     color: var(--page-muted);
 }
 
-/* The demo page is a plain page, so the element it wraps can be spaced with a tag selector here. */
-.page vaadin-button {
-    margin-right: 0.5rem;
+/* The class name `deltaDecorations` puts on the highlighted line. */
+.demo-line-highlight {
+    background: rgba(255, 196, 0, 0.28);
 }
