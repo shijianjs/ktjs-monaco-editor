@@ -8,6 +8,17 @@ title: Demo
 The live page is at **[https://shijianjs.github.io/ktjs-monaco-editor/demo/](https://shijianjs.github.io/ktjs-monaco-editor/demo/)**.
 It is this repository's `demo` module: a Kotlin/JS page that creates a real editor through the
 wrapper and exposes a few of the wrapper's calls as buttons.
+```mermaid
+flowchart LR
+  MON["Monaco.create(el, options)<br/>built-in Monarch grammar, no language worker"] --> ED["editor instance + its model"]
+  BTN["9 buttons"] -->|"one wrapper call each"| ED
+  ED -->|"getValue / setValue / executeEdits"| OUT["printed result + the Kotlin source of the call"]
+  ED -->|"deltaDecorations / setModelMarkers / getSelection / getPosition"| OUT
+  ED -->|"setTheme / setModelLanguage"| VIEW["the editor repaints, same model"]
+```
+
+Every button prints what it did *and* the Kotlin call that did it, so the page doubles as the wrapper's
+own cheat sheet.
 
 ## What the page shows
 

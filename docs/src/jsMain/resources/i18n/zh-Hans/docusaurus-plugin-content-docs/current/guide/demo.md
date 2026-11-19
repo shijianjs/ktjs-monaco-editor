@@ -7,6 +7,16 @@ title: 演示
 
 在线页面在 **[https://shijianjs.github.io/ktjs-monaco-editor/demo/](https://shijianjs.github.io/ktjs-monaco-editor/demo/)**。
 它就是本仓库的 `demo` 模块：一个 Kotlin/JS 页面，通过封装创建真实编辑器，并把封装的几个调用做成按钮。
+```mermaid
+flowchart LR
+  MON["Monaco.create(el, options)<br/>内置 Monarch 语法，不涉及语言 worker"] --> ED["编辑器实例 + 它的模型"]
+  BTN["9 个按钮"] -->|"每次一次封装调用"| ED
+  ED -->|"getValue / setValue / executeEdits"| OUT["打印结果 + 这次调用对应的 Kotlin 源码"]
+  ED -->|"deltaDecorations / setModelMarkers / getSelection / getPosition"| OUT
+  ED -->|"setTheme / setModelLanguage"| VIEW["编辑器重绘，模型不变"]
+```
+
+每个按钮既打印做了什么，也打印做这件事的 Kotlin 调用，所以这一页本身就是封装的速查表。
 
 ## 页面展示了什么
 
