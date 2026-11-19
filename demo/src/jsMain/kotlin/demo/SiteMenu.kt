@@ -1,7 +1,7 @@
 package demo
 
-import demo.page.overview.OverviewPage
-import demo.page.playground.PlaygroundPage
+import demo.page.overview.newOverviewPage
+import demo.page.playground.newPlaygroundPage
 import io.github.shijianjs.ktjs.demo.nav.DemoMenu
 import io.github.shijianjs.ktjs.demo.nav.Entry
 import io.github.shijianjs.ktjs.demo.nav.Group
@@ -28,7 +28,7 @@ internal val EXAMPLES: Group = Group("examples", "lucide:play")
  */
 fun siteMenu(): DemoMenu = DemoMenu(
     listOf(
-        Entry("overview", START, "lucide:sparkles") { OverviewPage() },
-        Entry("playground", EXAMPLES, "lucide:square-terminal") { PlaygroundPage() },
+        Entry("overview", START, "lucide:sparkles") { newOverviewPage() },
+        Entry("playground", EXAMPLES, "lucide:square-terminal") { newPlaygroundPage() },
     ),
 )

@@ -1,13 +1,15 @@
 package demo.page.playground
 
+import io.github.shijianjs.ktjs.demo.page.DemoPage
+import io.github.shijianjs.ktjs.dom.webcomponent.defineIfMissing
+import web.components.CustomElementReference
+import web.dom.TagName
 import io.github.shijianjs.ktjs.demo.i18n.Binder
 import io.github.shijianjs.ktjs.demo.i18n.Lang
 import io.github.shijianjs.ktjs.demo.i18n.Langs
 import io.github.shijianjs.ktjs.demo.i18n.Translations
 import io.github.shijianjs.ktjs.demo.i18n.texts
-import io.github.shijianjs.ktjs.demo.nav.Page
 import io.github.shijianjs.ktjs.demo.page.grid
-import io.github.shijianjs.ktjs.demo.page.newPage
 import io.github.shijianjs.ktjs.demo.page.sectionBlock
 import io.github.shijianjs.ktjs.demo.style.Palette
 import io.github.shijianjs.ktjs.dom.element.inlineStyle
@@ -138,8 +140,7 @@ private val playgroundTexts: Translations<PlaygroundTexts> = texts(
  * `automaticLayout` measures through it, and a page's field initialiser runs before the router
  * attaches the node.
  */
-internal class PlaygroundPage : Page {
-    private val page = newPage()
+internal class PlaygroundPage : DemoPage() {
 
     private val texts = Binder(playgroundTexts)
 
@@ -313,7 +314,6 @@ internal class PlaygroundPage : Page {
 
     private val buttons: List<ButtonElement> = calls.map { createButton() }
 
-    override val node get() = page
 
     init {
         // The two columns carry their own headings, so the section block stays title-less.
@@ -336,7 +336,7 @@ internal class PlaygroundPage : Page {
         }
 
         section.body.append(grid(minColumnWidth = 360, left, right))
-        page.body.append(section.root)
+        body.append(section.root)
 
         buttons.forEachIndexed { index, button ->
             button.clickEvent.addHandler {
@@ -393,13 +393,13 @@ internal class PlaygroundPage : Page {
             }
         }
         if (css.isEmpty()) return
-        page.addSheet(CSSStyleSheet().apply { replaceSync(css.toString()) })
+        addSheet(CSSStyleSheet().apply { replaceSync(css.toString()) })
     }
 
     override fun applyTranslation(lang: Lang) {
         current = playgroundTexts[lang]
-        page.setTitle(current.title)
-        page.setSummary(current.summary)
+        setTitle(current.title)
+        setSummary(current.summary)
         texts.apply(lang)
         buttons.forEachIndexed { index, button -> button.textContent = calls[index].label(current) }
         output.textContent = current.emptyOutput
@@ -413,7 +413,13 @@ internal class PlaygroundPage : Page {
         val run: (PlaygroundTexts) -> String,
     )
 
-    private companion object {
+    companion object : CustomElementReference<PlaygroundPage>(PlaygroundPage::class.js) {
+        val NAME: TagName<PlaygroundPage> = TagName("monaco-playground-page")
+
+        fun define() {
+            defineIfMissing(NAME, this)
+        }
+
         /** Kotlin, so the built-in Monarch grammar highlights it without starting a language service. */
         val SAMPLE = """
             fun main() {
@@ -438,4 +444,10 @@ private fun codeBlock(configure: HTMLElement.() -> Unit): HTMLElement = HtmlTagN
         maxHeight = 240.px
     }
     configure()
+}
+
+/** Creates a defined `<monaco-playground-page>`. */
+internal fun newPlaygroundPage(): PlaygroundPage {
+    PlaygroundPage.define()
+    return PlaygroundPage.NAME()
 }
