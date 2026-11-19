@@ -559,6 +559,20 @@ klibs.io 从 Maven Central 与 GitHub 自动抓取，无需提交元数据文件
 ## 演示页面与 GitHub Pages
 
 - `demo` 只消费公共 API，不发布、也不进入 Dokka。根 `build.gradle.kts` 的发布与 Dokka 配置按
+
+- **页面外壳来自 `ktjs-demo-kit`（`ktjs-dom-kit` 仓库的模块）**：`index.html` 只声明一个
+  `<ktjs-demo-layout id="demo">`，`demo/Main.kt` 设 `Monaco.environment`、定义标签并挂 `LayoutConfig`；
+  菜单在 `demo/SiteMenu.kt`，外壳文案在 `demo/SiteTexts.kt`，页面在 `demo/page/<分组>/`，每页一个
+  `Translations` + `Binder`。
+- **demo 的 JS 编译目标必须是 ES2015**：外壳是自定义元素，ES5 下 Kotlin 生成
+  `function X() { HTMLElement.call(this) }`，而 DOM 构造函数只能 `new`，标签永远不升级、页面白屏。
+- **monaco 的 CSS 必须搬进页面自己的 shadow 树**：它的样式由 `style-loader` 注入 `document.head`，
+  而 document 上的样式进不了 shadow root，页面就在 shadow 树里。不搬的话编辑器退化成「一个白框 +
+  裸露的 textarea + 侧滑条」，且不会报错。做法在 `PlaygroundPage.adoptInjectedStyles()`：遍历
+  `document.styleSheets`，跳过 `href != null` 的链接表，把注入表的规则文本拼起来，用
+  `CSSStyleSheet().replaceSync(text)` 交给 `DemoPage.addSheet(...)`。
+- **编辑器要等宿主挂载后再 `Monaco.editor.create`**：`automaticLayout` 会量宿主尺寸，页面字段的初始化
+  却早于路由把节点接进文档；用 `requestAnimationFrame` 等到 `isConnected`。
   `ktjs-monaco-editor-` 前缀过滤子模块，新增非发布模块时沿用该约定。
 - 根 `package.json` 的 `browserslist` 是构建必需项，不是装饰：Babel 从生成的站点目录往上找到它才有编译
   目标。没有它 `@babel/preset-env` 按 ES5 处理，`async/await` 被翻成 regenerator 状态机，
