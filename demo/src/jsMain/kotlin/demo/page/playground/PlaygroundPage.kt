@@ -28,13 +28,9 @@ import js.objects.unsafeJso
 import web.animations.requestAnimationFrame
 import web.cssom.Border
 import web.cssom.CSSStyleSheet
-import web.cssom.FontFamily
 import web.cssom.FontSize
 import web.cssom.LineStyle
-import web.cssom.Margin
 import web.cssom.Overflow
-import web.cssom.Padding
-import web.cssom.WhiteSpace
 import web.cssom.pct
 import web.cssom.px
 import web.dom.clickEvent
@@ -167,12 +163,12 @@ internal class PlaygroundPage : DemoPage() {
         }
     }
 
-    private val output: HTMLElement = codeBlock {
+    private val output: CodeBlock = newCodeBlock().apply {
         setAttribute("data-output", "")
         textContent = current.emptyOutput
     }
 
-    private val call: HTMLElement = codeBlock { setAttribute("data-call", "") }
+    private val call: CodeBlock = newCodeBlock().apply { setAttribute("data-call", "") }
 
     /**
      * Every wrapper call the page offers, in the order its button is created.
@@ -430,21 +426,6 @@ internal class PlaygroundPage : DemoPage() {
     }
 }
 
-/** A read-only code block: monospace on a raised surface, scrolling inside a fixed height. */
-private fun codeBlock(configure: HTMLElement.() -> Unit): HTMLElement = HtmlTagName.pre {
-    inlineStyle.apply {
-        margin = Margin(0.px, 0.px)
-        padding = Padding(12.px, 12.px)
-        fontFamily = FontFamily.monospace
-        fontSize = 13.px
-        whiteSpace = WhiteSpace.preWrap
-        backgroundColor = Palette.surfaceRaised
-        borderRadius = 8.px
-        overflow = Overflow.scroll
-        maxHeight = 240.px
-    }
-    configure()
-}
 
 /** Creates a defined `<monaco-playground-page>`. */
 internal fun newPlaygroundPage(): PlaygroundPage {
