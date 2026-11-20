@@ -1,6 +1,8 @@
 package demo.page.playground
 
 import io.github.shijianjs.ktjs.demo.page.DemoPage
+import io.github.shijianjs.ktjs.demo.page.Grid
+import io.github.shijianjs.ktjs.demo.page.SectionBlock
 import io.github.shijianjs.ktjs.dom.webcomponent.defineIfMissing
 import web.components.CustomElementReference
 import web.dom.TagName
@@ -9,8 +11,6 @@ import io.github.shijianjs.ktjs.demo.i18n.Lang
 import io.github.shijianjs.ktjs.demo.i18n.Langs
 import io.github.shijianjs.ktjs.demo.i18n.Translations
 import io.github.shijianjs.ktjs.demo.i18n.texts
-import io.github.shijianjs.ktjs.demo.page.grid
-import io.github.shijianjs.ktjs.demo.page.sectionBlock
 import io.github.shijianjs.ktjs.demo.style.Palette
 import io.github.shijianjs.ktjs.dom.element.inlineStyle
 import io.github.shijianjs.ktjs.dom.element.invoke
@@ -163,12 +163,12 @@ internal class PlaygroundPage : DemoPage() {
         }
     }
 
-    private val output: CodeBlock = newCodeBlock().apply {
+    private val output: CodeBlock = CodeBlock.NAME().apply {
         setAttribute("data-output", "")
         textContent = current.emptyOutput
     }
 
-    private val call: CodeBlock = newCodeBlock().apply { setAttribute("data-call", "") }
+    private val call: CodeBlock = CodeBlock.NAME().apply { setAttribute("data-call", "") }
 
     /**
      * Every wrapper call the page offers, in the order its button is created.
@@ -313,7 +313,7 @@ internal class PlaygroundPage : DemoPage() {
 
     init {
         // The two columns carry their own headings, so the section block stays title-less.
-        val section = sectionBlock()
+        val section = SectionBlock.NAME { show() }
         val editorHeading = HtmlTagName.h2 { textContent = current.editorHeading }
         val controlsHeading = HtmlTagName.h2 { textContent = current.controlsHeading }
         val outputHeading = HtmlTagName.h2 { textContent = current.outputHeading }
@@ -331,7 +331,7 @@ internal class PlaygroundPage : DemoPage() {
             )
         }
 
-        section.body.append(grid(minColumnWidth = 360, left, right))
+        section.body.append(Grid.NAME { show(360); add(left, right) })
         body.append(section.root)
 
         buttons.forEachIndexed { index, button ->
@@ -424,11 +424,4 @@ internal class PlaygroundPage : DemoPage() {
             }
         """.trimIndent()
     }
-}
-
-
-/** Creates a defined `<monaco-playground-page>`. */
-internal fun newPlaygroundPage(): PlaygroundPage {
-    PlaygroundPage.define()
-    return PlaygroundPage.NAME()
 }

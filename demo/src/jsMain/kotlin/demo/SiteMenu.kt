@@ -1,10 +1,11 @@
 package demo
 
-import demo.page.overview.newOverviewPage
-import demo.page.playground.newPlaygroundPage
+import demo.page.overview.OverviewPage
+import demo.page.playground.PlaygroundPage
 import io.github.shijianjs.ktjs.demo.nav.DemoMenu
 import io.github.shijianjs.ktjs.demo.nav.Entry
 import io.github.shijianjs.ktjs.demo.nav.Group
+import io.github.shijianjs.ktjs.dom.element.invoke
 
 /** The monaco-editor version this demo is built against; the navbar shows it under the site name. */
 const val SITE_VERSION: String = "0.57.0"
@@ -28,7 +29,7 @@ internal val EXAMPLES: Group = Group("examples", "lucide:play")
  */
 fun siteMenu(): DemoMenu = DemoMenu(
     listOf(
-        Entry("overview", START, "lucide:sparkles") { newOverviewPage() },
-        Entry("playground", EXAMPLES, "lucide:square-terminal") { newPlaygroundPage() },
+        Entry("overview", START, "lucide:sparkles") { OverviewPage.NAME() },
+        Entry("playground", EXAMPLES, "lucide:square-terminal") { PlaygroundPage.NAME() },
     ),
 )

@@ -4,8 +4,7 @@ import io.github.shijianjs.ktjs.demo.style.Palette
 import io.github.shijianjs.ktjs.dom.element.inlineStyle
 import io.github.shijianjs.ktjs.dom.element.invoke
 import io.github.shijianjs.ktjs.dom.webcomponent.CustomElementAdapter
-import io.github.shijianjs.ktjs.dom.webcomponent.defineIfMissing
-import web.components.CustomElementReference
+import io.github.shijianjs.ktjs.dom.webcomponent.CustomElementReferenceAdapter
 import web.cssom.Display
 import web.cssom.FontFamily
 import web.cssom.Margin
@@ -13,7 +12,6 @@ import web.cssom.Overflow
 import web.cssom.Padding
 import web.cssom.WhiteSpace
 import web.cssom.px
-import web.dom.TagName
 
 /**
  * `<monaco-code-block>`: a read-only block of source code — monospace on a raised surface, scrolling
@@ -40,17 +38,5 @@ internal class CodeBlock : CustomElementAdapter() {
         }
     }
 
-    companion object : CustomElementReference<CodeBlock>(CodeBlock::class.js) {
-        val NAME: TagName<CodeBlock> = TagName("monaco-code-block")
-
-        fun define() {
-            defineIfMissing(NAME, this)
-        }
-    }
-}
-
-/** Creates a defined `<monaco-code-block>`. */
-internal fun newCodeBlock(): CodeBlock {
-    CodeBlock.define()
-    return CodeBlock.NAME()
+    companion object : CustomElementReferenceAdapter<CodeBlock>(CodeBlock::class.js, "monaco-code-block")
 }
