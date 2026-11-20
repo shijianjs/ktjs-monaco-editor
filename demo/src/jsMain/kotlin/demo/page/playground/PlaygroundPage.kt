@@ -38,67 +38,6 @@ import web.events.addHandler
 import web.html.HTMLElement
 import web.html.HtmlTagName
 
-private val playgroundEnglish: PlaygroundTexts = PlaygroundTexts(
-    title = "Playground",
-    summary = "One editor, one wrapper call per button, and the Kotlin that ran underneath — the " +
-        "editor is created once, so switching language or theme never drops the model.",
-    editorHeading = "A live editor",
-    controlsHeading = "Wrapper calls",
-    outputHeading = "Result",
-    callHeading = "The Kotlin that ran",
-    emptyOutput = "Run one of the calls to see its result here.",
-    readValue = "Read the text",
-    setValue = "Replace the text",
-    insertLine = "Insert a line",
-    highlightLine = "Highlight line 3",
-    addMarker = "Add a warning marker",
-    showSelection = "Show the selection",
-    showCursor = "Show the cursor",
-    nextTheme = "Next theme",
-    nextLanguage = "Next language",
-    themes = listOf("vs", "vs-dark", "hc-black"),
-    languages = listOf("kotlin", "plaintext", "markdown"),
-    sampleMarker = "This line is flagged by the demo.",
-    selectionResult = "selection",
-    cursorResult = "cursor",
-    insertedLine = "line inserted at the end of the model",
-    highlightedLine = "line 3 is highlighted",
-    nowEditing = "the model now uses language",
-)
-
-private val playgroundChinese: PlaygroundTexts = PlaygroundTexts(
-    title = "演练场",
-    summary = "一个编辑器，每个按钮一次封装调用，下面是被执行的那段 Kotlin——编辑器只建一次，切换语言" +
-        "或主题都不会丢掉模型。",
-    editorHeading = "可交互的编辑器",
-    controlsHeading = "封装调用",
-    outputHeading = "结果",
-    callHeading = "实际执行的 Kotlin 代码",
-    emptyOutput = "点击任意一个调用，结果会显示在这里。",
-    readValue = "读取文本",
-    setValue = "替换文本",
-    insertLine = "插入一行",
-    highlightLine = "高亮第 3 行",
-    addMarker = "添加警告标记",
-    showSelection = "查看选区",
-    showCursor = "查看光标",
-    nextTheme = "切换主题",
-    nextLanguage = "切换语言",
-    themes = listOf("vs", "vs-dark", "hc-black"),
-    languages = listOf("kotlin", "plaintext", "markdown"),
-    sampleMarker = "这一行被 demo 标记了。",
-    selectionResult = "选区",
-    cursorResult = "光标",
-    insertedLine = "已在模型末尾插入一行",
-    highlightedLine = "第 3 行已高亮",
-    nowEditing = "模型现在的语言是",
-)
-
-private val playgroundTexts: Translations<PlaygroundTexts> = texts(
-    Langs.EN to playgroundEnglish,
-    Langs.ZH_HANS to playgroundChinese,
-)
-
 /**
  * The playground page: the editor on the left, one button per wrapper call on the right.
  *
@@ -393,5 +332,64 @@ internal class PlaygroundPage : DemoPage() {
                 println(greeting)
             }
         """.trimIndent()
+
+        private val playgroundEnglish: PlaygroundTexts = PlaygroundTexts(
+            title = "Playground",
+            summary = "One editor, one wrapper call per button, and the Kotlin that ran underneath — the " +
+                "editor is created once, so switching language or theme never drops the model.",
+            editorHeading = "A live editor",
+            controlsHeading = "Wrapper calls",
+            outputHeading = "Result",
+            callHeading = "The Kotlin that ran",
+            emptyOutput = "Run one of the calls to see its result here.",
+            readValue = "Read the text",
+            setValue = "Replace the text",
+            insertLine = "Insert a line",
+            highlightLine = "Highlight line 3",
+            addMarker = "Add a warning marker",
+            showSelection = "Show the selection",
+            showCursor = "Show the cursor",
+            nextTheme = "Next theme",
+            nextLanguage = "Next language",
+            themes = listOf("vs", "vs-dark", "hc-black"),
+            languages = listOf("kotlin", "plaintext", "markdown"),
+            sampleMarker = "This line is flagged by the demo.",
+            selectionResult = "selection",
+            cursorResult = "cursor",
+            insertedLine = "line inserted at the end of the model",
+            highlightedLine = "line 3 is highlighted",
+            nowEditing = "the model now uses language",
+        )
+        private val playgroundChinese: PlaygroundTexts = PlaygroundTexts(
+            title = "演练场",
+            summary = "一个编辑器，每个按钮一次封装调用，下面是被执行的那段 Kotlin——编辑器只建一次，切换语言" +
+                "或主题都不会丢掉模型。",
+            editorHeading = "可交互的编辑器",
+            controlsHeading = "封装调用",
+            outputHeading = "结果",
+            callHeading = "实际执行的 Kotlin 代码",
+            emptyOutput = "点击任意一个调用，结果会显示在这里。",
+            readValue = "读取文本",
+            setValue = "替换文本",
+            insertLine = "插入一行",
+            highlightLine = "高亮第 3 行",
+            addMarker = "添加警告标记",
+            showSelection = "查看选区",
+            showCursor = "查看光标",
+            nextTheme = "切换主题",
+            nextLanguage = "切换语言",
+            themes = listOf("vs", "vs-dark", "hc-black"),
+            languages = listOf("kotlin", "plaintext", "markdown"),
+            sampleMarker = "这一行被 demo 标记了。",
+            selectionResult = "选区",
+            cursorResult = "光标",
+            insertedLine = "已在模型末尾插入一行",
+            highlightedLine = "第 3 行已高亮",
+            nowEditing = "模型现在的语言是",
+        )
+        private val playgroundTexts: Translations<PlaygroundTexts> = texts(
+            Langs.EN to playgroundEnglish,
+            Langs.ZH_HANS to playgroundChinese,
+        )
     }
 }
