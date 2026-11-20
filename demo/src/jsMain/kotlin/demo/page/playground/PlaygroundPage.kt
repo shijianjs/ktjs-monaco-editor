@@ -28,7 +28,6 @@ import js.objects.unsafeJso
 import web.animations.requestAnimationFrame
 import web.cssom.Border
 import web.cssom.CSSStyleSheet
-import web.cssom.FontSize
 import web.cssom.LineStyle
 import web.cssom.Overflow
 import web.cssom.pct
@@ -38,34 +37,6 @@ import web.dom.document
 import web.events.addHandler
 import web.html.HTMLElement
 import web.html.HtmlTagName
-
-/** Every string this page shows, in one language. */
-private class PlaygroundTexts(
-    val title: String,
-    val summary: String,
-    val editorHeading: String,
-    val controlsHeading: String,
-    val outputHeading: String,
-    val callHeading: String,
-    val emptyOutput: String,
-    val readValue: String,
-    val setValue: String,
-    val insertLine: String,
-    val highlightLine: String,
-    val addMarker: String,
-    val showSelection: String,
-    val showCursor: String,
-    val nextTheme: String,
-    val nextLanguage: String,
-    val themes: List<String>,
-    val languages: List<String>,
-    val sampleMarker: String,
-    val selectionResult: String,
-    val cursorResult: String,
-    val insertedLine: String,
-    val highlightedLine: String,
-    val nowEditing: String,
-)
 
 private val playgroundEnglish: PlaygroundTexts = PlaygroundTexts(
     title = "Playground",
@@ -309,7 +280,6 @@ internal class PlaygroundPage : DemoPage() {
     )
 
     private val buttons: List<ButtonElement> = calls.map { createButton() }
-
 
     init {
         // The two columns carry their own headings, so the section block stays title-less.
