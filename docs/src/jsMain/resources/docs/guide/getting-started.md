@@ -32,6 +32,15 @@ The module publishes as `ktjs-monaco-editor`, versioned `{upstream npm version}-
 `npm("monaco-editor", …)` dependency comes with the POM, so a consumer only has to keep the version
 in step when it pins one itself.
 
+```mermaid
+flowchart LR
+    DEP["ktjs-monaco-editor + npm monaco-editor"] --> ED["Monaco.editor.create(host, unsafeJso { … })"]
+    CSS["webpack: style-loader + css-loader handle monaco's .css"] --> ED
+    WK["a webpack entry emits editor.worker.js"] --> ENV["Monaco.environment = unsafeJso { getWorkerUrl = … }"]
+    ENV --> ED
+    ED --> OUT["IStandaloneCodeEditor: model / cursor / decorations / markers"]
+```
+
 ## The first editor
 
 ```kotlin

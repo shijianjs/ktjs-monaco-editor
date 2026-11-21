@@ -30,6 +30,15 @@ dependencies {
 模块以 `ktjs-monaco-editor` 发布，版本号是 `{上游 npm 版本}-kt.{修订号}`。`npm("monaco-editor", …)`
 依赖随 POM 一起传入，只有你自己要固定版本时才需要跟着改。
 
+```mermaid
+flowchart LR
+    DEP["ktjs-monaco-editor + npm monaco-editor"] --> ED["Monaco.editor.create(host, unsafeJso { … })"]
+    CSS["webpack：style-loader + css-loader 处理 monaco 的 .css"] --> ED
+    WK["webpack entry 产出 editor.worker.js"] --> ENV["Monaco.environment = unsafeJso { getWorkerUrl = … }"]
+    ENV --> ED
+    ED --> OUT["IStandaloneCodeEditor：model / cursor / decorations / markers"]
+```
+
 ## 第一个编辑器
 
 ```kotlin

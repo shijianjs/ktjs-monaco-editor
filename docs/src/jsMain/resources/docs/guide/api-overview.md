@@ -26,6 +26,16 @@ and constants). A file name tells you what kind of declaration you are looking a
 `Monaco` has no `worker` accessor and `WorkerTypes.kt` holds the types a worker context is written
 against.
 
+```mermaid
+flowchart TB
+    GEN["scripts/generate-api.py<br/>editor.api.d.ts → one Kotlin package per namespace"] --> PKG["…monaco.editor / languages<br/>…monaco.worker: types only"]
+    HAND["Monaco: the one hand-written object"] --> ED["Monaco.editor → EditorNamespace"]
+    HAND --> LG["Monaco.languages → LanguagesNamespace"]
+    HAND --> ENV["Monaco.environment<br/>getWorkerUrl / getWorker / globalAPI"]
+    HAND --> FAC["Monaco.uri / position / range / selection<br/>instances built with Reflect.construct"]
+    HAND --> ST["Monaco.Uri / Position / Range / KeyMod<br/>statics bound to the module export by name"]
+```
+
 ## The `Monaco` entry point
 
 `Monaco` is the one hand-written object; everything else is generated.

@@ -24,6 +24,16 @@ title: API 概览
 `worker` 在运行时没有对应的值：上游在这个命名空间只声明类型，导出列表里也没有它，所以 `Monaco`
 不提供 `worker` 访问器，`WorkerTypes.kt` 里放的是编写 worker 上下文时需要的类型。
 
+```mermaid
+flowchart TB
+    GEN["scripts/generate-api.py<br/>editor.api.d.ts → 每个 namespace 一个 Kotlin 包"] --> PKG["…monaco.editor / languages<br/>…monaco.worker 只有类型"]
+    HAND["Monaco：唯一手写的对象"] --> ED["Monaco.editor → EditorNamespace"]
+    HAND --> LG["Monaco.languages → LanguagesNamespace"]
+    HAND --> ENV["Monaco.environment<br/>getWorkerUrl / getWorker / globalAPI"]
+    HAND --> FAC["Monaco.uri / position / range / selection<br/>Reflect.construct 造实例"]
+    HAND --> ST["Monaco.Uri / Position / Range / KeyMod<br/>Statics 按名字绑到模块导出"]
+```
+
 ## `Monaco` 入口
 
 `Monaco` 是唯一手写的对象，其余都是生成的。
