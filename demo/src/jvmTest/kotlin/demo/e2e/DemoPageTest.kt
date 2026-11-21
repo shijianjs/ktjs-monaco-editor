@@ -101,7 +101,7 @@ class DemoPageTest {
     /** The shell routes on the hash; a click on the sidebar is how a visitor gets there. */
     private fun goTo(page: Page, route: String) {
         page.locator("vaadin-side-nav-item[data-route='$route']").click()
-        page.waitForSelector("ktjs-demo-page h1")
+        page.waitForSelector("monaco-$route-page h1")
     }
 
     private fun openPage(page: Page) {
