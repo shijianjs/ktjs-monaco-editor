@@ -4,7 +4,6 @@ import io.github.shijianjs.ktjs.demo.style.Palette
 import io.github.shijianjs.ktjs.dom.element.inlineStyle
 import io.github.shijianjs.ktjs.dom.element.invoke
 import io.github.shijianjs.ktjs.dom.webcomponent.CustomElementAdapter
-import io.github.shijianjs.ktjs.dom.webcomponent.CustomElementReferenceAdapter
 import web.cssom.Display
 import web.cssom.FontFamily
 import web.cssom.Margin
@@ -38,5 +37,5 @@ internal class CodeBlock : CustomElementAdapter() {
         }
     }
 
-    companion object : CustomElementReferenceAdapter<CodeBlock>(CodeBlock::class.js, "monaco-code-block")
+    companion object : CodeBlockDefaultReference()
 }

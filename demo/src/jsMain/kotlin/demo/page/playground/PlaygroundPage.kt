@@ -1,6 +1,5 @@
 package demo.page.playground
 
-import io.github.shijianjs.ktjs.dom.webcomponent.CustomElementReferenceAdapter
 import io.github.shijianjs.ktjs.demo.page.DemoPage
 import io.github.shijianjs.ktjs.demo.page.Grid
 import io.github.shijianjs.ktjs.demo.page.SectionBlock
@@ -317,7 +316,7 @@ internal class PlaygroundPage : DemoPage() {
         val run: (PlaygroundTexts) -> String,
     )
 
-    companion object : CustomElementReferenceAdapter<PlaygroundPage>(PlaygroundPage::class.js, "monaco-playground-page") {
+    companion object : PlaygroundPageDefaultReference() {
 
         /** Kotlin, so the built-in Monarch grammar highlights it without starting a language service. */
         val SAMPLE = """
